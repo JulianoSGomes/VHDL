@@ -162,10 +162,10 @@ architecture Behavioral of tb_ENQUETE is
 			WAIT FOR 400 NS;
 			
 			
-			w_CHECK_BOM <= '1';
-			WAIT FOR 60 NS;
-			w_CHECK_BOM <= '0';			
-			WAIT FOR 400 NS;
+--			w_CHECK_BOM <= '1';
+--			WAIT FOR 60 NS;
+--			w_CHECK_BOM <= '0';			
+--			WAIT FOR 400 NS;
 		wait;
 	END PROCESS;
 end Behavioral;            

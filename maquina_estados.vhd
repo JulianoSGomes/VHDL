@@ -33,9 +33,9 @@ ENTITY maquina_estados is
         --
         -- OUTPUT
         --
-        o_DISPLAY_0		: out STD_LOGIC_VECTOR(7 downto 0);
-        o_DISPLAY_1		: out STD_LOGIC_VECTOR(7 downto 0);
-        o_DISPLAY_2		: out STD_LOGIC_VECTOR(7 downto 0)
+        o_DISPLAY_0		: out STD_LOGIC_VECTOR(9 downto 0);
+        o_DISPLAY_1		: out STD_LOGIC_VECTOR(9 downto 0);
+        o_DISPLAY_2		: out STD_LOGIC_VECTOR(9 downto 0)
     );
    end maquina_estados;
 
@@ -174,8 +174,8 @@ begin
 						w_STATE <= st_RATIO_BOM;
 					END IF;
 				WHEN st_RATIO_BOM => 
-					w_DENOM <= w_check_bom *("0000000000000001100100");
-					w_NUMER <= "0000000000000000000000" & w_SUM;
+					w_DENOM <= "0000000000000000000000" & w_SUM;
+					w_NUMER <= w_check_bom *("0000000000000001100100");
 					w_STATE <= st_IDLE;
 				WHEN OTHERS =>
 					w_STATE <= st_IDLE;

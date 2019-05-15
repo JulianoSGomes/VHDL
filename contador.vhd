@@ -64,6 +64,8 @@ architecture behavioral of contador is
 							w_CONT4 <= w_CONT4 + 1;
 							IF (W_CONT4 = "1001") THEN
 								w_CONT4 <= (others => '0');
+							ELSE 
+								NULL;
 							END IF;
 						END IF;
 					END IF;
