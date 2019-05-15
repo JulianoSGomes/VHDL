@@ -104,9 +104,7 @@ architecture Behavioral of ENQUETE is
 	SIGNAL w_OUT_FSM_2 : STD_LOGIC_VECTOR((p_DATA_WIDTH-1) DOWNTO 0);
 	
 begin
---		o_DISPLAY_0 <= w_DISPLAY_0;
---		o_DISPLAY_1 <= w_DISPLAY_1;
---		o_DISPLAY_2 <= w_DISPLAY_2;
+
 	--
 	-- INSTANCIALIZAÇÃO DA MAQUINA DE ESTADOS.
 	--
