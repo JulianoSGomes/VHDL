@@ -91,18 +91,19 @@ begin
 			o_EN <= '1';
 			o_WE <= '1';
 			w_SUM <= (others => '0');
+			w_CONT <= (others => '0');					
 			w_STATE    <= st_IDLE;
 		ELSIF rising_edge (i_CLK) THEN
 			CASE w_STATE IS
 				WHEN st_IDLE =>
 					o_WE <= '1';
 					o_EN <= '1';
-					--w_SUM <= (others => '0');
+					w_SUM <= (others => '0');
 					w_CONT <= (others => '0');
 					IF (i_CHECK_BOM = '1' ) THEN
 						o_WE <= '1';
 						o_EN <= '0';
-						o_ADDRESS <= "000000";
+						--o_ADDRESS <= "000000";
 						w_STATE <= st_RCHECK_BOM;
 					ELSIF (i_CHECK_REGULAR = '1') THEN
 					ELSIF (i_CHECK_RUIM = '1') THEN 
@@ -159,6 +160,7 @@ begin
 					w_STATE <= st_IDLE;	
 					
 				WHEN st_RCHECK_BOM =>
+					--w_SUM <= (others => '0');
 					if w_cont = "00" THEN
 						o_ADDRESS <= "000000";
 						w_check_bom <= i_DATA;
