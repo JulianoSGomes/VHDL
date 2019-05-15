@@ -55,17 +55,19 @@ architecture behavioral of maquina_estados is
 								  st_RBOM,  st_WBOM, 
 								  st_RREGULAR,  st_WREGULAR, 
 								  st_RRUIM,  st_WRUIM,
-								  st_RCHECK_BOM, st_WCHECK_BOM,
-								  st_RCHECK_REGULAR, st_WCHECK_REGULAR,
-								  st_RCHECK_RUIM, st_WCHECK_RUIM,
-								  st_RATIO_BOM
+								  st_RCHECK_BOM,
+								  st_RCHECK_REGULAR,
+								  st_RCHECK_RUIM, 
+								  st_RATIO_BOM,
+								  st_RATIO_REGULAR,
+								  st_RATIO_RUIM
 								);
 									
    attribute syn_enconding : string;
    attribute syn_enconding of w_State_Type : type is "safe";
 	 
    SIGNAL w_STATE   : w_State_Type;
-	SIGNAL w_check_bom : STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0);
+	SIGNAL w_check_BOM : STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0);
 	SIGNAL w_check_REGULAR : STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0);
 	SIGNAL w_check_RUIM : STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0);
 	SIGNAL w_SUM      : STD_LOGIC_VECTOR ((p_DATA_WIDTH-1) downto 0);
@@ -103,10 +105,15 @@ begin
 					IF (i_CHECK_BOM = '1' ) THEN
 						o_WE <= '1';
 						o_EN <= '0';
-						--o_ADDRESS <= "000000";
 						w_STATE <= st_RCHECK_BOM;
 					ELSIF (i_CHECK_REGULAR = '1') THEN
+						o_WE <= '1';
+						o_EN <= '0';
+						w_STATE <= st_RCHECK_REGULAR;
 					ELSIF (i_CHECK_RUIM = '1') THEN 
+						o_WE <= '1';
+						o_EN <= '0';
+						w_STATE <= st_RCHECK_RUIM;
 					ELSIF (i_BOM = '1') THEN
 						o_EN <= '0';
 						o_WE <= '1';
@@ -160,7 +167,6 @@ begin
 					w_STATE <= st_IDLE;	
 					
 				WHEN st_RCHECK_BOM =>
-					--w_SUM <= (others => '0');
 					if w_cont = "00" THEN
 						o_ADDRESS <= "000000";
 						w_check_bom <= i_DATA;
@@ -181,6 +187,50 @@ begin
 				WHEN st_RATIO_BOM => 
 					w_DENOM <= "0000000000000000000000" & w_SUM;
 					w_NUMER <= w_check_bom *("0000000000000001100100");
+					w_STATE <= st_IDLE;
+				WHEN st_RCHECK_REGULAR =>
+					if w_cont = "00" THEN
+						o_ADDRESS <= "000000";
+						w_SUM <= i_DATA + w_SUM;
+						w_cont <= w_cont + '1';
+						w_STATE <= st_RCHECK_REGULAR;
+					elsif w_cont = "01" THEN
+						o_ADDRESS <= "000001";
+						w_check_regular <= i_DATA;
+						w_SUM <= i_DATA + w_SUM;
+						w_cont <= w_cont + '1';
+						w_STATE <= st_RCHECK_REGULAR;
+					else 	
+						o_ADDRESS <= "000010";
+						w_SUM <= i_DATA + w_SUM;
+						w_cont <= (OTHERS => '0');
+						w_STATE <= st_RATIO_REGULAR;
+					END IF;
+				WHEN st_RATIO_REGULAR => 
+					w_DENOM <= "0000000000000000000000" & w_SUM;
+					w_NUMER <= w_check_regular *("0000000000000001100100");
+					w_STATE <= st_IDLE;
+				WHEN st_RCHECK_RUIM =>
+					if w_cont = "00" THEN
+						o_ADDRESS <= "000000";
+						w_SUM <= i_DATA + w_SUM;
+						w_cont <= w_cont + '1';
+						w_STATE <= st_RCHECK_RUIM;
+					elsif w_cont = "01" THEN
+						o_ADDRESS <= "000001";
+						w_SUM <= i_DATA + w_SUM;
+						w_cont <= w_cont + '1';
+						w_STATE <= st_RCHECK_RUIM;
+					else 	
+						o_ADDRESS <= "000010";
+						w_check_ruim <= i_DATA;
+						w_SUM <= i_DATA + w_SUM;
+						w_cont <= (OTHERS => '0');
+						w_STATE <= st_RATIO_RUIM;
+					END IF;
+				WHEN st_RATIO_RUIM => 
+					w_DENOM <= "0000000000000000000000" & w_SUM;
+					w_NUMER <= w_check_regular *("0000000000000001100100");
 					w_STATE <= st_IDLE;
 				WHEN OTHERS =>
 					w_STATE <= st_IDLE;
