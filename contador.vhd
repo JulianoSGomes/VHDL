@@ -11,15 +11,15 @@ ENTITY contador is
         p_DATA_IN_WIDTH  : INTEGER := 31
     );
    Port ( 
-        i_CLK 	    		 : in STD_LOGIC;
-        i_RST	    		 : in STD_LOGIC;
-		  i_EN				 : in STD_LOGIC;
+        i_CLK 	    		: IN STD_LOGIC;
+        i_RST	    		: IN STD_LOGIC;
+		  i_EN				: IN STD_LOGIC;
 									
-        i_DATA			 	 : IN STD_LOGIC_VECTOR(p_DATA_IN_WIDTH DOWNTO 0);
+        i_DATA			 	: IN STD_LOGIC_VECTOR(p_DATA_IN_WIDTH DOWNTO 0);
 
-        o_DISPLAY_0		: out STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-        o_DISPLAY_1		: out STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
-        o_DISPLAY_2		: out STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0)
+        o_DISPLAY_0		: OUT STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
+        o_DISPLAY_1		: OUT STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
+        o_DISPLAY_2		: OUT STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0)
     );
 	END contador;
 
@@ -40,7 +40,7 @@ architecture behavioral of contador is
 	
 	BEGIN 
 	
-	U_CONTADOR : PROCESS BEGIN	
+	U_CONTADOR : PROCESS(i_CLK) BEGIN		
 		IF (i_RST = '0') THEN
 			w_CONT <= (others => '0');
 			w_CONT1 <= (others => '0');
@@ -50,6 +50,11 @@ architecture behavioral of contador is
 		ELSIF rising_edge(i_CLK) THEN
 			CASE w_STATE IS
 				WHEN st_IDLE => 
+					w_CONT <= (others => '0');
+					w_CONT1 <= (others => '0');
+					w_CONT2 <= (others => '0');
+					w_CONT3 <= (others => '0');
+					w_CONT4 <= (others => '0');
 					IF (i_EN = '1') THEN 
 						w_DATA <= i_DATA;
 						w_STATE <= st_RUN;
@@ -59,14 +64,15 @@ architecture behavioral of contador is
 				WHEN st_RUN =>		
 					w_CONT <= w_CONT + '1';
 					IF (w_CONT = w_DATA) THEN
-						o_DISPLAY_2 <= w_CONT1;
-						o_DISPLAY_1 <= w_CONT2;
-						o_DISPLAY_0 <= w_CONT3;
+						o_DISPLAY_2 <= "000000" & w_CONT1;
+						o_DISPLAY_1 <= "000000" & w_CONT2;
+						o_DISPLAY_0 <= "000000" & w_CONT3;
+						w_CONT  <= (others => '0');
 						w_STATE <= st_IDLE;
 					ELSE
-						w_CONT1 <= w_CONT + '1';
-						IF (w_CONT = "1001") THEN
-							w_CONT  <= (others => '0');
+						w_CONT1 <= w_CONT1 + '1';
+						IF (w_CONT1 = "1001") THEN
+							w_CONT1  <= (others => '0');
 							w_CONT2 <= w_CONT2 + 1;
 							IF (w_CONT2 = "1001") THEN
 								w_CONT2 <= (others => '0');

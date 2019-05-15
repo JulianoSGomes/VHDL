@@ -17,10 +17,10 @@ architecture Behavioral of tb_CONTADOR is
 	SIGNAL w_CLK           : STD_LOGIC;
 	SIGNAL w_RST           : STD_LOGIC;
 	SIGNAL w_EN			   : STD_LOGIC;
-	SIGNAL w_DATA 			  : STD_LOGIC_VECTOR  (p_DATA_IN_WIDTH downto 0);
-	SIGNAL w_DISPLAY_0     : STD_LOGIC_VECTOR  (7 downto 0); 
-	SIGNAL w_DISPLAY_1     : STD_LOGIC_VECTOR  (7 downto 0); 
-	SIGNAL w_DISPLAY_2     : STD_LOGIC_VECTOR  (7 downto 0); 
+	SIGNAL w_DATA 			: STD_LOGIC_VECTOR  (p_DATA_IN_WIDTH downto 0);
+	SIGNAL w_DISPLAY_0     : STD_LOGIC_VECTOR  ((p_DATA_WIDTH-1) downto 0); 
+	SIGNAL w_DISPLAY_1     : STD_LOGIC_VECTOR  ((p_DATA_WIDTH-1) downto 0); 
+	SIGNAL w_DISPLAY_2     : STD_LOGIC_VECTOR  ((p_DATA_WIDTH-1) downto 0); 
 	
 	COMPONENT CONTADOR is
     Generic(
@@ -31,7 +31,7 @@ architecture Behavioral of tb_CONTADOR is
         i_CLK 	    		 : in  STD_LOGIC;
         i_RST       		 : in  STD_LOGIC;
 		i_EN 				 : IN  STD_LOGIC;
-        i_DATA			 	 : IN STD_LOGIC_VECTOR(p_DATA_WIDTH-1 DOWNTO 0);
+        i_DATA			 	 : IN STD_LOGIC_VECTOR(p_DATA_IN_WIDTH-1 DOWNTO 0);
 
         o_DISPLAY_0		: out STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
         o_DISPLAY_1		: out STD_LOGIC_VECTOR((p_DATA_WIDTH-1) downto 0);
@@ -43,8 +43,8 @@ architecture Behavioral of tb_CONTADOR is
 	
 		U_CONTADOR : CONTADOR
 		GENERIC MAP(        
-		   p_DATA_WIDTH  	 => p_DATA_WIDTH,
-			p_DATA_IN_WIDTH => p_DATA_IN_WIDTH 
+		   	p_DATA_WIDTH  	 	=> p_DATA_WIDTH,
+			p_DATA_IN_WIDTH 	=> p_DATA_IN_WIDTH 
 		  )
 		PORT MAP(
 		  	i_CLK 	    		=> w_CLK,
@@ -78,5 +78,7 @@ architecture Behavioral of tb_CONTADOR is
 		w_EN <= '1';
 		w_DATA <= "00000000000000000000000000101010";
 		WAIT FOR 200 NS;
+		w_EN <= '0';
+		WAIT;
 	END PROCESS;
 end Behavioral;            
