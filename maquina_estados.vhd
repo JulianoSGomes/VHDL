@@ -133,6 +133,7 @@ begin
 				WHEN st_WBOM => 
 					o_ADDRESS <= "000000";
 					o_DATA <= w_SUM;
+					o_DISPLAY_0 <= w_sum;
 					w_STATE <= st_IDLE;
 					
 				WHEN st_RREGULAR  =>
@@ -143,6 +144,7 @@ begin
 				WHEN st_WREGULAR => 
 					o_ADDRESS <= "000001";
 					o_DATA <= w_SUM;
+					o_DISPLAY_1 <= w_sum;
 					w_STATE <= st_IDLE;		
 					
 				WHEN st_RRUIM  =>
@@ -153,6 +155,7 @@ begin
 				WHEN st_WRUIM => 
 					o_ADDRESS <= "000010";
 					o_DATA <= w_SUM;
+					o_DISPLAY_2 <= w_sum;
 					w_STATE <= st_IDLE;	
 					
 				WHEN st_RCHECK_BOM =>
