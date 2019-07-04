@@ -75,7 +75,7 @@ architecture behavioral of cafeteira is
 			ElSE 
 				o_ACUCAR <= '0';
 			END IF;
-			
+				
 			IF (i_REPO = '1') THEN
 				o_REPO <= '1';
 			ElSE 
