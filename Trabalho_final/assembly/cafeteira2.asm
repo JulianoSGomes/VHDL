@@ -28,13 +28,13 @@ BEGIN
     LDI, R1, 0;
     OUT, R1, 3; 
     IN, R0, 1;
-    JZ, R0, 0;
+    JZ, R0, END LINHA ANTERIOR;
     LDI, R1, 1;
     OUT, R1, 3; 
-    JI, 0;
+    JI, VERIFICAR INGREDIENTES;
 
     CALL, REPOSICAO;
-    JI, 0;
+    JI, VERIFICAR INGREDIENTES;
 
 NOP;
 END
@@ -48,27 +48,27 @@ TIPOCAFE
     LDI, R1, 2;
     AND, R2, R1, R0;
     CMP, R3, R2, R1;
-    JE, R2, 0;
+    JE, R2, END TAMANHO;
     JI, acucar;
     CALL, TAMANHO
     LDI, R1, 1;
     AND, R2, R1, R0;
     CMP, R3, R2, R1;
-    JE, R2, 0;
+    JE, R2, END ACUCAR;
     JI, qualcafe;
     CALL, ADDACUCAR;
     LDI, R1, 4;
     AND, R2, R0, R1;
     CMP, R3, R2, R1
-    JE, R2, 0;
+    JE, R2, END MOCHA;
     LDI, R1, 8;
     AND, R2, R0, R1;
     CMP, R3, R2, R1;
-    JE, R2, 0;
+    JE, R2, END CAFELEITE;
     LDI, R1, 16;
     AND, R2, R1, R0;
     CMP, R3, R2, R1;
-    JE, R2, 0;
+    JE, R2, END CAFEPRETO;
     JI, NOP;
     CALL, MOCA;
     CALL, CAFELEITE;
@@ -135,13 +135,13 @@ ACUCAR
 RET;
 
 .INT0
-    IN, R1, 0; 
+    IN, R1, END Nivel água; 
     JZ, R1,  
 RETI;
 
 
 .INT1
-    IN, R1, 0; 
+    IN, R1, END Nivel água; 
     JZ, R1,  
 RETI;
 
@@ -149,8 +149,9 @@ RETI;
 REPOSICAO
     LDI, R1, 1;
     OUT, R1, 4;
-    IN, R1, 0;
-    JZ, R1,0;
+    IN, R1, endereço repo;
+    JZ, R1, LINHA  DE CIMA;
     LDI, R1, 0;
     OUT, R1, 4;
 RET;
+

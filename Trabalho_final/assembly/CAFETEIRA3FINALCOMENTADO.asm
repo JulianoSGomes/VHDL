@@ -2,16 +2,21 @@
     SETR, INT, 0; 
     SETR, INT, 1;
 BEGIN
+    ## carregando os ingredientes
     LDI, R0,  10;
     STO, R0, 0; 
     STO, R0, 1; 
     STO, R0, 2; 
     STO, R0, 3; 
     
+
+    ## INICIALIZANDO  CONTADOR DE TEMOI
     LDI, R0, 5;      
     STO, R0,  10;      
    
 
+
+   ## verificando ingredientes
     LD, R0, 0;
     JZ, R0, 37; 
     LD, R0, 1;
@@ -24,17 +29,17 @@ BEGIN
     CALL, TIPOCAFE;
 
     LD, R0, 10;
-    OUT, R0, 2;  
+    OUT, R0, 2;  ##envia pro contador
     LDI, R1, 0;
-    OUT, R1, 3; 
+    OUT, R1, 3; ##ENVIA PRO DIPLAY U8
     IN, R0, 1;
-    JZ, R0, 0;
+    JZ, R0, END LINHA ANTERIOR;
     LDI, R1, 1;
-    OUT, R1, 3; 
-    JI, 0;
+    OUT, R1, 3; ##ENVIA PRO DIPLAY U8
+    JI, VERIFICAR INGREDIENTES;
 
-    CALL, REPOSICAO;
-    JI, 0;
+    CALL, pararcafeteira;
+    JI, VERIFICAR INGREDIENTES;
 
 NOP;
 END
@@ -45,30 +50,32 @@ RET;
 
 TIPOCAFE
     IN, R0, 2;
+    ## tamanho de cafe
     LDI, R1, 2;
     AND, R2, R1, R0;
     CMP, R3, R2, R1;
-    JE, R2, 0;
+    JE, R2, END TAMANHO;
     JI, acucar;
     CALL, TAMANHO
     LDI, R1, 1;
     AND, R2, R1, R0;
     CMP, R3, R2, R1;
-    JE, R2, 0;
+    JE, R2, END ACUCAR;
     JI, qualcafe;
     CALL, ADDACUCAR;
+    ## qual cafe
     LDI, R1, 4;
     AND, R2, R0, R1;
     CMP, R3, R2, R1
-    JE, R2, 0;
+    JE, R2, END MOCHA;
     LDI, R1, 8;
     AND, R2, R0, R1;
     CMP, R3, R2, R1;
-    JE, R2, 0;
+    JE, R2, END CAFELEITE;
     LDI, R1, 16;
     AND, R2, R1, R0;
     CMP, R3, R2, R1;
-    JE, R2, 0;
+    JE, R2, END CAFEPRETO;
     JI, NOP;
     CALL, MOCA;
     CALL, CAFELEITE;
@@ -134,23 +141,23 @@ ACUCAR
     STO, R2, 10;
 RET;
 
+## nível da água
 .INT0
-    IN, R1, 0; 
-    JZ, R1,  
+    IN, R1, END Nivel água; 
+    LDI, R2, 0;
+    CMP, R3, R1, R2; 
+    JE, R3, END LED AGUA; 
 RETI;
 
 
 .INT1
-    IN, R1, 0; 
-    JZ, R1,  
+    LDI, R2, 0;
+    CMP, R3, R1, R2; 
+    JE, R3, END LED  temp AGUA;
 RETI;
 
 
-REPOSICAO
-    LDI, R1, 1;
-    OUT, R1, 4;
-    IN, R1, 0;
-    JZ, R1,0;
-    LDI, R1, 0;
-    OUT, R1, 4;
+
+pararcafeteira
+    NOP;
 RET;
