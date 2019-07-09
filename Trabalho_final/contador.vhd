@@ -47,7 +47,8 @@ architecture behavioral of contador is
 		ELSIF rising_edge (i_CLK) THEN
 			CASE w_STATE IS
 				WHEN st_IDLE =>
-					IF (i_EN = '1' AND w_CONT_SEC < i_DATA)  THEN
+					IF (w_CONT_SEC < i_DATA)  THEN
+					   o_DATA <= '0';
 						w_STATE <= st_RUN;
 					ELSE
 						w_STATE <= st_IDLE;

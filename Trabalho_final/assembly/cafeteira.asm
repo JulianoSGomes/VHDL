@@ -1,4 +1,4 @@
-.PROG
+﻿.PROG
     SETR, INT, 0;
     SETR, INT, 1;
 
@@ -57,13 +57,16 @@ NOP;
 END
 
 .INT0
+    IN, R0, 4;
+    JZ, R0, 0;
 RETI;
 
 .INT1
+    IN, R0, 5;
+    JZ, R0, 0;
 RETI;
 
-.INT2
-RETI;
+
 
 CPUSLEEP     
     NOP;
@@ -93,12 +96,12 @@ TIPOCAFE
     LDI, R1, 8;  
     AND, R2, R0, R1;
     CMP, R3, R2, R1;
-    JE, R2, 26;
+    JE, R2, 25;
 
     LDI, R1, 16;  
     AND, R2, R1, R0;
     CMP, R3, R2, R1;
-    JE, R2, 28; 
+    JE, R2, 27; 
 
     CALL, MOCHA; 
     JI, 31;
