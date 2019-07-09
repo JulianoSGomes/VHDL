@@ -137,7 +137,7 @@ CAFELEITE
     SUB, R2, R0, R1;
     STO, R2, 0;
     LD, R0,  2;
-    SUB, R2, R0,  10;
+    SUB, R2, R0,  R1;
     STO, R2, 2;
     LD, R0, 10;
     LDI, R1, 2;
@@ -167,6 +167,9 @@ ACUCAR
     LDI, R1,  1;
     ADD, R2, R1, R0;
     STO, R2, 10;
+    LD,  R0, 1;
+    SUB, R2,  R0, R1;
+    STO, R2,  1;
 RET;
 
 REPOSICAO
