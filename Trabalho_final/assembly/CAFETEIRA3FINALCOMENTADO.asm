@@ -1,92 +1,108 @@
 .PROG
-    SETR, INT, 0; 
+    SETR, INT, 0;
     SETR, INT, 1;
+
 BEGIN
-    ## carregando os ingredientes
-    LDI, R0,  10;
-    STO, R0, 0; 
-    STO, R0, 1; 
-    STO, R0, 2; 
-    STO, R0, 3; 
+//guarda valores na RAM
+    LDI, R0, 10;
+    STO, R0, 0;     //cafe 
+    STO, R0, 1;     //acucar
+    STO, R0, 2;     //leite
+    STO, R0, 3;     //chocolate
     
-
-    ## INICIALIZANDO  CONTADOR DE TEMOI
     LDI, R0, 5;      
-    STO, R0,  10;      
+    STO, R0,  10;   //guarda valor inicial de timer    
+
    
-
-
-   ## verificando ingredientes
-    LD, R0, 0;
-    JZ, R0, 37; 
+   //verifica  suprimentos
+    LD, R0, 0;      
+    JZ, R0, 25; 
     LD, R0, 1;
-    JZ, R0, 37; 
+    JZ, R0, 25; 
     LD, R0, 2;
-    JZ, R0, 37; 
+    JZ, R0, 25; 
     LD, R0, 3;
-    JZ, R0, 37; 
+    JZ, R0, 25; 
     
+    IN, R0, 2; 
+    JZ, R0, 7; 
+    STO, R0, 11;
+
     CALL, TIPOCAFE;
-
+   
     LD, R0, 10;
-    OUT, R0, 2;  ##envia pro contador
+    OUT, R0, 0; //timer  tempo  
     LDI, R1, 0;
-    OUT, R1, 3; ##ENVIA PRO DIPLAY U8
+    OUT, R1, 1; //display 7 seg U8
     IN, R0, 1;
-    JZ, R0, END LINHA ANTERIOR;
+    JZ, R0, 20; //linha  anterior(espera resposta do timer)
+    LDI, R0, 5;
+    OUT, R0, 0; //timer tempo
     LDI, R1, 1;
-    OUT, R1, 3; ##ENVIA PRO DIPLAY U8
-    JI, VERIFICAR INGREDIENTES;
+    OUT, R1, 1; //display 7 seg Done 
+    IN, R0, 1;
+    JZ, R0, 25; //linha  anterior(espera resposta do timer)
+    
+    JI, 0;//jump verifica reposiçao
 
-    CALL, pararcafeteira;
-    JI, VERIFICAR INGREDIENTES;
+    CALL, REPOSICAO;
+    JI, 0; //jump veriica reposicao
 
 NOP;
 END
 
-EMPTY
-    IN, R0, 
+.INT0
+RETI;
+
+.INT1
+RETI;
+
+.INT2
+RETI;
+
+CPUSLEEP     //fake sleep
+    NOP;
+    JI, 0; 
 RET;
 
 TIPOCAFE
-    IN, R0, 2;
-    ## tamanho de cafe
+//Verifica Tamanho
+    LD, R0, 11;
     LDI, R1, 2;
     AND, R2, R1, R0;
-    CMP, R3, R2, R1;
-    JE, R2, END TAMANHO;
-    JI, acucar;
-    CALL, TAMANHO
+    CMP, R3, R2, R1;7
+    JE, R2, 0;    //jump TAMANH
+    JI, 0;t
+    CALL, TAMANHO;
+    //verifica a açucar
     LDI, R1, 1;
     AND, R2, R1, R0;
     CMP, R3, R2, R1;
-    JE, R2, END ACUCAR;
-    JI, qualcafe;
-    CALL, ADDACUCAR;
-    ## qual cafe
-    LDI, R1, 4;
-    AND, R2, R0, R1;
-    CMP, R3, R2, R1
-    JE, R2, END MOCHA;
-    LDI, R1, 8;
+    JE, R2, 0;    //JUMP AÇUCAR
+    JI, 0;
+    LDI, R1, 4;   //moca
     AND, R2, R0, R1;
     CMP, R3, R2, R1;
-    JE, R2, END CAFELEITE;
-    LDI, R1, 16;
+    JE, R2, 0;   //jump moca
+    LDI, R1, 8;  // cafe com leite
+    AND, R2, R0, R1;
+    CMP, R3, R2, R1;
+    JE, R2, 0;   // jump caafe com  leite
+    LDI, R1, 16;  //cafe preto
     AND, R2, R1, R0;
     CMP, R3, R2, R1;
-    JE, R2, END CAFEPRETO;
-    JI, NOP;
-    CALL, MOCA;
+    JE, R2, 0; //jump cafe preto
+    JI,0;
+    NOP;
+    CALL, MOCHA;
     CALL, CAFELEITE;
     CALL, CAFEPRETO;
-    CALL, TAMANHO;
     CALL, ACUCAR;
     NOP;
 RET;
 
 
-MOCA
+MOCHA
    LDI, R1, 1;
    LD, R0, 0;
    SUB, R2, R1, R0;
@@ -103,7 +119,7 @@ MOCA
    STO, R2, 10;
 RET;
 
-CAFELEITE;
+CAFELEITE
     LDI, R1, 1;
     LD, R0, 0;
     SUB, R2, R1, R0;
@@ -117,7 +133,7 @@ CAFELEITE;
     STO,  R2, 10;
 RET;
 
-CAFEPRETO;
+CAFEPRETO
     LDI, R1, 1;
     LD, R0, 0;
     SUB, R2, R1, R0;
@@ -141,23 +157,12 @@ ACUCAR
     STO, R2, 10;
 RET;
 
-## nível da água
-.INT0
-    IN, R1, END Nivel água; 
-    LDI, R2, 0;
-    CMP, R3, R1, R2; 
-    JE, R3, END LED AGUA; 
-RETI;
-
-
-.INT1
-    LDI, R2, 0;
-    CMP, R3, R1, R2; 
-    JE, R3, END LED  temp AGUA;
-RETI;
-
-
-
-pararcafeteira
-    NOP;
+REPOSICAO
+    LDI, R1, 1;
+    OUT, R1, 4;  //led reposicao
+    IN, R1, 0;
+    JZ, R1, 0;
+    LDI, R1, 0;
+    OUT, R1, 4;
 RET;
+

@@ -32,20 +32,15 @@ BEGIN
    
     LD, R0, 10;
     OUT, R0, 0; 
-
     LDI, R1, 0;
     OUT, R1, 1; 
-
-    IN, R0, 3;
+    IN, R0, 1;
     JZ, R0, 20; 
-
     LDI, R0, 5;
     OUT, R0, 0; 
-
     LDI, R1, 1;
     OUT, R1, 1; 
-
-    IN, R0, 3;
+    IN, R0, 1;
     JZ, R0, 25; 
     
     JI, 0;
@@ -83,44 +78,38 @@ TIPOCAFE
     LDI, R1, 1;
     AND, R2, R1, R0;
     CMP, R3, R2, R1;
-    JE, R2, 29   
-
+    JE, R2, 22;    
     LDI, R1, 4;   
     AND, R2, R0, R1;
     CMP, R3, R2, R1;
-    JE, R2, 23;   
-
+    JE, R2, 20;   
     LDI, R1, 8;  
     AND, R2, R0, R1;
     CMP, R3, R2, R1;
-    JE, R2, 26;
-
+    JE, R2, 21;   
     LDI, R1, 16;  
     AND, R2, R1, R0;
     CMP, R3, R2, R1;
-    JE, R2, 28; 
-
-    CALL, MOCHA; 
-    JI, 31;
+    JE, R2, 22; 
+    JI,0;
+    CALL, MOCHA;
     CALL, CAFELEITE;
-    JI, 31;
     CALL, CAFEPRETO;
-    JI, 31;
     CALL, ACUCAR;
-    JI, 11;
+    NOP;
 RET;
 
 
 MOCHA
    LDI, R1, 1;
    LD, R0, 0;
-   SUB, R2, R0, R1;
+   SUB, R2, R1, R0;
    STO, R2, 0;
    LD, R0, 2;
-   SUB, R2, R0, R1;
+   SUB, R2, R1, R0;
    STO, R2, 2;
    LD, R0, 3;
-   SUB, R2, R0, R1;
+   SUB, R2, R1, R0;
    STO, R2, 3;
    LD, R0, 10;
    LDI, R1, 3;
@@ -131,10 +120,10 @@ RET;
 CAFELEITE
     LDI, R1, 1;
     LD, R0, 0;
-    SUB, R2, R0, R1;
+    SUB, R2, R1, R0;
     STO, R2, 0;
     LD, R0,  2;
-    SUB, R2, R0,  10;
+    SUB, R2, R1,  R0;
     STO, R2, 2;
     LD, R0, 10;
     LDI, R1, 2;
@@ -145,7 +134,7 @@ RET;
 CAFEPRETO
     LDI, R1, 1;
     LD, R0, 0;
-    SUB, R2, R0, R1;
+    SUB, R2, R1, R0;
     STO, R2, 0;
     LD, R0, 10;
     ADD,  R2, R1, R0;
@@ -174,3 +163,4 @@ REPOSICAO
     LDI, R1, 0;
     OUT, R1, 4;
 RET;
+
